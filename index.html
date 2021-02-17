@@ -85,6 +85,8 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
         // TODO
+        document.getElementById('recordForm').style.display = 'none';
+        document.getElementById('recordIDcontainer').style.display = 'none';
         let myFetch = fetch(document.getElementById('endpoint').value);
         myFetch.then(response => response.json())
         .then(function (data) {
@@ -98,6 +100,8 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
         // TODO
+        document.getElementById('recordForm').style.display = 'none';
+        document.getElementById('recordIDcontainer').style.display = 'none';
         let sign = prompt("Enter record id");
         let myFetch = fetch(document.getElementById('endpoint').value);
         myFetch.then(response => response.json())
@@ -117,8 +121,6 @@
       function createRecord() {
         // TODO
         document.getElementById('recordForm').style.display = 'block';
-        document.getElementById('author').innerText = "this";
-        console.log("create");
         let myFetch = fetch(document.getElementById('endpoint').value);
         myFetch.then(response => response.json())
       }
@@ -129,6 +131,8 @@
       // the writeup to view the URL pattern for create and update
       function updateRecord() {
         // TODO
+        document.getElementById('recordForm').style.display = 'block';
+        document.getElementById('recordIDcontainer').style.display = 'block';
       }
 
       // This function should use fetch to delete one existing entry in the given endpoint.
@@ -138,6 +142,9 @@
       // delete all, only delete one.
       function deleteRecord() {
         // TODO
+        document.getElementById('recordForm').style.display = 'none';
+        document.getElementById('recordIDcontainer').style.display = 'none';
+        let sign = prompt("Enter record id");
       }
 
       window.addEventListener('DOMContentLoaded', () => {

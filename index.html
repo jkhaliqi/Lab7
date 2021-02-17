@@ -85,6 +85,10 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
         // TODO
+        let myFetch = fetch(document.getElementById('endpoint').value);
+        myFetch.then(function (data) {
+          document.getElementById('output').innerHTML(data);
+        })
       }
 
       // This function should fetch one entry from the given endpoint.

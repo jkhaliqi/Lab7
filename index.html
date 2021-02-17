@@ -86,8 +86,9 @@
       function fetchAll() {
         // TODO
         let myFetch = fetch(document.getElementById('endpoint').value);
-        myFetch.then(function (data) {
-          document.getElementById('output').innerHTML(data);
+        myFetch.then(response => response.json())
+        .then(function (data) {
+          document.getElementById('output').innerText = JSON.stringify(data);
         })
       }
 
@@ -97,6 +98,16 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
         // TODO
+        let sign = prompt("Enter record id");
+        let myFetch = fetch(document.getElementById('endpoint').value);
+        myFetch.then(response => response.json())
+        .then(function (data) {
+          for(let i = 0; i < data.length; i++) {
+            if(data[i].id == sign) {
+              document.getElementById('output').innerText = JSON.stringify(data[i]);
+            }
+          }
+        })
       }
 
       // This function should use fetch to create one entry in the given endpoint.
@@ -105,6 +116,11 @@
       // the writeup to view the URL pattern for create and update
       function createRecord() {
         // TODO
+        document.getElementById('recordForm').style.display = 'visible';
+        // document.getElementById('author').innerText = "this";
+        // console.log("create");
+        // let myFetch = fetch(document.getElementById('endpoint').value);
+        // myFetch.then(response => response.json())
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.

@@ -134,31 +134,35 @@
           document.getElementById('recordForm').style.display = 'block';
           document.getElementById('recordIDcontainer').style.display= 'none';
         }
-        if(arguments[0] == 'submit') {
+        if (arguments[0] == 'submit') {
+          const endPoint = document.getElementById("endpoint");
+          const output = document.getElementById("output");
           let bodyContent = {
-            title : document.getElementById("title").value,
-            author : document.getElementById("author").vaue, 
+          title : document.getElementById("title").value,
+          author : document.getElementById("author").value,
           };
-          fetch(document.getElementById('endpoint').value, {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json"
-          },
-          body: JSON.stringify(bodyContent)
+
+          fetch(endPoint.value, {
+            method: 'post',
+            headers: {
+              "Content-type": "application/json"
+            },
+            body: JSON.stringify(bodyContent)
           })
-          .then(function(response) {
-          if(response.status != 200) {
-            document.getElementById("output").textContent = "Network Error " + response.status;
-          }
-          response.json()
-          .then(function(data) {
-            document.getElementById("output").textContent = JSON.stringify(data);
-          })
-          .catch(function(error) {
-        })
-      })
-    }
-  }
+          .then(function(response) { 
+            if (response.status !== 200) {
+              output.textContent = "Network Error " + response.status;
+            } 
+            response.json()
+
+            .then(function(data) {
+              output.textContent = JSON.stringify(data);
+            })
+            .catch(function(error) {
+            })
+          });
+        }
+      }
 
       // This function should use fetch to update one existing entry in the given endpoint.
       // From the 4 CRUD actions, this is the UPDATE action, and uses the PUT http method.

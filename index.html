@@ -88,9 +88,15 @@
         document.getElementById('recordForm').style.display = 'none';
         document.getElementById('recordIDcontainer').style.display = 'none';
         let myFetch = fetch(document.getElementById('endpoint').value);
-        myFetch.then(response => response.json())
-        .then(function (data) {
-          document.getElementById('output').innerText = JSON.stringify(data);
+        myFetch.then(function(response) {
+          if(response.status != 200) {
+            output.textContent = "Network Error 404";
+          }
+          response.json()
+          .then(function(data) {
+            console.log(data);
+            output.textContent = JSON.stringify(data);
+          })
         })
       }
 
@@ -112,6 +118,10 @@
             }
           }
         })
+        .catch(error => {
+          console.log("error!");
+          console.error(error);
+        })
       }
 
       // This function should use fetch to create one entry in the given endpoint.
@@ -120,10 +130,35 @@
       // the writeup to view the URL pattern for create and update
       function createRecord() {
         // TODO
-        document.getElementById('recordForm').style.display = 'block';
-        let myFetch = fetch(document.getElementById('endpoint').value);
-        myFetch.then(response => response.json())
-      }
+        if(arguments[0] == 'show') {
+          document.getElementById('recordForm').style.display = 'block';
+          document.getElementById('recordIDcontainer').style.display= 'none';
+        }
+        if(arguments[0] == 'submit') {
+          let bodyContent = {
+            title : document.getElementById("title").value,
+            author : document.getElementById("author").vaue, 
+          };
+          fetch(document.getElementById('endpoint').value, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify(bodyContent)
+          })
+          .then(function(response) {
+          if(response.status != 200) {
+            document.getElementById("output").textContent = "Network Error " + response.status;
+          }
+          response.json()
+          .then(function(data) {
+            document.getElementById("output").textContent = JSON.stringify(data);
+          })
+          .catch(function(error) {
+        })
+      })
+    }
+  }
 
       // This function should use fetch to update one existing entry in the given endpoint.
       // From the 4 CRUD actions, this is the UPDATE action, and uses the PUT http method.
@@ -131,9 +166,41 @@
       // the writeup to view the URL pattern for create and update
       function updateRecord() {
         // TODO
-        document.getElementById('recordForm').style.display = 'block';
-        document.getElementById('recordIDcontainer').style.display = 'block';
+        if(arguments[0] == 'show') {
+          document.getElementById('recordForm').style.display = 'block';
+          document.getElementById('recordIDcontainer').style.display = 'block';
+        }
+        if(arguments[0] == 'submit') {
+          const endPoint = document.getElementById("endpoint");
+          const output = document.getElementById("output");
+          let bodyContent = {
+          title : document.getElementById("title").value,
+          author : document.getElementById("author").value,
+          };
+          fetch(endPoint.value + "/" + document.getElementById("recordID").value, {
+            method: "PUT" ,
+            headers: {
+              "Content-type": "application/json"
+            },
+            body: JSON.stringify(bodyContent)
+          })
+          .then(function(response) {
+            if (response.status != 200) {
+              output.textContent = "Network Error " + response.status;
+              return;
+            }
+            response.json()
+            .then(function(data) {
+              output.textContent = JSON.stringify(data);
+            })
+            .catch(function(error) {
+              console.log(error);
+              output.textContent = error;
+            })
+          });
+        }
       }
+      
 
       // This function should use fetch to delete one existing entry in the given endpoint.
       // From the 4 CRUD actions, this is the DELETE action, and uses the DELETE http method.
@@ -144,7 +211,24 @@
         // TODO
         document.getElementById('recordForm').style.display = 'none';
         document.getElementById('recordIDcontainer').style.display = 'none';
-        let sign = prompt("Enter record id");
+        const endPoint = document.getElementById("endpoint");
+        const output = document.getElementById("output");
+        fetch(endPoint.value + "/" + prompt("Enter record id"), {
+          method: 'delete'
+        })
+        .then(
+          function(response) {
+            if (response.status !== 200) {
+              output.textContent = "Network Error " + response.status;
+              return;
+            }
+            response.json()
+            .then(function (data) { 
+              console.log(data);
+              output.textContent = JSON.stringify(data);
+            })
+          }
+        );
       }
 
       window.addEventListener('DOMContentLoaded', () => {
